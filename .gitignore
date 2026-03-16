@@ -1,0 +1,16 @@
+.DS_Store
+.idea/
+*.iml
+
+backend/target/
+frontend-web/node_modules/
+frontend-web/dist/
+frontend-web/*.tsbuildinfo
+frontend-web/vite.config.js
+frontend-web/vite.config.d.ts
+mobile/node_modules/
+.expo/
+.expo-shared/
+
+.env
+*.log

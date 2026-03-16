@@ -1,0 +1,39 @@
+#!/bin/sh
+set -e
+
+BASE_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+WRAPPER_PROPERTIES="$BASE_DIR/.mvn/wrapper/maven-wrapper.properties"
+
+if [ ! -f "$WRAPPER_PROPERTIES" ]; then
+  echo "Missing $WRAPPER_PROPERTIES" >&2
+  exit 1
+fi
+
+DIST_URL=$(sed -n 's/^distributionUrl=//p' "$WRAPPER_PROPERTIES")
+if [ -z "$DIST_URL" ]; then
+  echo "distributionUrl not configured" >&2
+  exit 1
+fi
+
+DIST_FILE=$(basename "$DIST_URL")
+DIST_NAME=${DIST_FILE%-bin.tar.gz}
+CACHE_DIR="${HOME}/.m2/wrapper/dists/${DIST_NAME}"
+MAVEN_HOME="${CACHE_DIR}/${DIST_NAME}"
+ARCHIVE_PATH="${CACHE_DIR}/${DIST_FILE}"
+
+if [ ! -x "$MAVEN_HOME/bin/mvn" ]; then
+  mkdir -p "$CACHE_DIR"
+  if [ ! -f "$ARCHIVE_PATH" ]; then
+    if command -v curl >/dev/null 2>&1; then
+      curl -fsSL "$DIST_URL" -o "$ARCHIVE_PATH"
+    elif command -v wget >/dev/null 2>&1; then
+      wget -q "$DIST_URL" -O "$ARCHIVE_PATH"
+    else
+      echo "curl or wget is required to download Maven" >&2
+      exit 1
+    fi
+  fi
+  tar -xzf "$ARCHIVE_PATH" -C "$CACHE_DIR"
+fi
+
+exec "$MAVEN_HOME/bin/mvn" "$@"

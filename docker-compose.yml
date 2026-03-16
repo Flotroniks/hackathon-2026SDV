@@ -1,0 +1,43 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: carbon-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-carbon_platform}
+      POSTGRES_USER: ${POSTGRES_USER:-carbon}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-carbon}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+
+  backend:
+    build:
+      context: ./backend
+    container_name: carbon-backend
+    depends_on:
+      - postgres
+    restart: unless-stopped
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-carbon_platform}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-carbon}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-carbon}
+      JWT_SECRET: ${JWT_SECRET:-change-me-with-a-long-secret-key-for-local-dev}
+      JWT_EXPIRATION_MS: ${JWT_EXPIRATION_MS:-86400000}
+      APP_CORS_ALLOWED_ORIGINS: ${APP_CORS_ALLOWED_ORIGINS:-http://localhost:5173,http://localhost:5174,http://localhost:8081,http://localhost:19006}
+    ports:
+      - "8088:8080"
+
+  frontend-web:
+    build:
+      context: ./frontend-web
+    container_name: carbon-frontend-web
+    depends_on:
+      - backend
+    restart: unless-stopped
+    ports:
+      - "5174:80"
+
+volumes:
+  postgres_data:

@@ -1,0 +1,32 @@
+{
+  "sourceLabel": "Mock factors inspired by public ADEME Base Carbone references",
+  "materials": {
+    "CONCRETE": {
+      "kg": 0.12,
+      "m3": 240.0
+    },
+    "STEEL": {
+      "kg": 1.90,
+      "ton": 1900.0
+    },
+    "GLASS": {
+      "kg": 1.00
+    },
+    "WOOD": {
+      "kg": 0.20,
+      "m3": 90.0
+    },
+    "ALUMINUM": {
+      "kg": 8.20
+    },
+    "BRICK": {
+      "kg": 0.24
+    }
+  },
+  "energy": {
+    "ELECTRICITY_GRID": 0.056,
+    "NATURAL_GAS": 0.227,
+    "DISTRICT_HEATING": 0.120,
+    "FUEL_OIL": 0.324
+  }
+}

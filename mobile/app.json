@@ -1,0 +1,29 @@
+{
+  "expo": {
+    "name": "Carbon Platform Mobile",
+    "slug": "carbon-platform-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "resizeMode": "contain",
+      "backgroundColor": "#f7f8f5"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.carbonplatformmobile"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#f7f8f5"
+      },
+      "package": "com.anonymous.carbonplatformmobile"
+    },
+    "web": {
+      "bundler": "metro"
+    }
+  }
+}

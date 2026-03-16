@@ -1,0 +1,11 @@
+package com.sdv.carbon.dto.auth;
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
+public record FirstLoginPasswordChangeRequest(
+        @NotBlank @Email String email,
+        @NotBlank String currentPassword,
+        @NotBlank @Size(min = 8, max = 64) String newPassword) {
+}
