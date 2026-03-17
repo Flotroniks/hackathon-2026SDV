@@ -55,9 +55,18 @@ export EXPO_PUBLIC_API_BASE_URL=http://localhost:8088/api/v1
 ```
 
 ## First connection
-- No account is pre-created.
-- On the first visit to the login page, create the initial admin account.
-- After creating this account, coherent demo data is seeded automatically (3 sites + initial calculations).
+- A seeded admin account is created by Flyway migrations.
+- Login credentials:
+  - Email: `seed.owner@carbon.local`
+  - Password: `SeedOwner123!`
+- Demo data is also seeded automatically (sites + calculations).
+
+## Database reset (Docker)
+If login or seed data is broken, reset everything (containers + PostgreSQL volume) and recreate from migrations:
+```bash
+docker compose down -v
+docker compose up -d --build
+```
 
 ## API highlights
 - Auth: `/api/v1/auth/bootstrap/status`, `/api/v1/auth/bootstrap/register`, `/api/v1/auth/login`, `/api/v1/auth/me`

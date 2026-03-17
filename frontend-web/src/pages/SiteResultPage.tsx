@@ -1,12 +1,34 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { calculateSite, fetchCalculationHistory, fetchLatestCalculation } from '../api/calculationApi';
+import client from '../api/client';
 import { fetchSite } from '../api/siteApi';
 import type { CalculationHistoryItemResponse, CalculationResponse } from '../types/calculation';
 import type { SiteResponse } from '../types/site';
 import { formatDateTime, formatKg, formatNumber } from '../utils/formatters';
 import { AlertBanner } from '../components/common/AlertBanner';
 import { LoadingSpinner } from '../components/common/LoadingSpinner';
+import {
+  ExploitationForm,
+  type EnergyType,
+  type ExploitationFormValues,
+  type ExploitationPayload,
+} from '../components/forms/ExploitationForm';
+
+function toExploitationEnergyType(energySource: SiteResponse['energySource']): EnergyType {
+  if (energySource === 'NATURAL_GAS') {
+    return 'gas';
+  }
+  if (energySource === 'ELECTRICITY_GRID') {
+    return 'electricity';
+  }
+  return 'mix';
+}
+
+async function saveSiteExploitationData(payload: ExploitationPayload) {
+  const { data } = await client.post(`/sites/${payload.siteId}/operations`, payload);
+  return data;
+}
 
 export function SiteResultPage() {
   const { siteId } = useParams<{ siteId: string }>();
@@ -15,6 +37,8 @@ export function SiteResultPage() {
   const [history, setHistory] = useState<CalculationHistoryItemResponse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
+  const [operationsSuccess, setOperationsSuccess] = useState('');
+  const [operationsError, setOperationsError] = useState('');
 
   async function loadData() {
     if (!siteId) {
@@ -56,6 +80,20 @@ export function SiteResultPage() {
     }
   }
 
+  async function handleExploitationSubmit(payload: ExploitationPayload) {
+    setOperationsError('');
+    setOperationsSuccess('');
+    try {
+      await saveSiteExploitationData(payload);
+      setOperationsSuccess("Donnees d'exploitation enregistrees.");
+    } catch {
+      setOperationsError(
+        "Impossible d'enregistrer les donnees d'exploitation. Verifiez le backend.",
+      );
+      throw new Error('operations_save_failed');
+    }
+  }
+
   if (isLoading) {
     return <LoadingSpinner />;
   }
@@ -63,6 +101,13 @@ export function SiteResultPage() {
   if (!site) {
     return <AlertBanner type="error" message="Site not found" />;
   }
+
+  const exploitationInitialValues: Partial<ExploitationFormValues> = {
+    annualEnergyConsumptionKwh: site.annualEnergyConsumptionKwh,
+    energyType: toExploitationEnergyType(site.energySource),
+    employeeCount: site.employeeCount,
+    parkingSpaces: site.parkingSpaces,
+  };
 
   return (
     <div className="space-y-5">
@@ -132,6 +177,17 @@ export function SiteResultPage() {
             </table>
           </div>
         </div>
+      </div>
+
+      <div className="space-y-3">
+        <h2 className="text-xl font-semibold">Donnees d'exploitation</h2>
+        {operationsSuccess ? <AlertBanner type="success" message={operationsSuccess} /> : null}
+        {operationsError ? <AlertBanner type="error" message={operationsError} /> : null}
+        <ExploitationForm
+          site={{ id: site.id, name: site.name, code: site.code, city: site.city, country: site.country }}
+          initialValues={exploitationInitialValues}
+          onSubmit={handleExploitationSubmit}
+        />
       </div>
     </div>
   );

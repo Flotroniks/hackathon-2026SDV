@@ -3,8 +3,8 @@ INSERT INTO sites (
     annual_energy_consumption_kwh, energy_source, employee_count, archived,
     created_by, created_at, updated_at
 ) VALUES
-    ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaa4', 'Nantes Hub', 'NAN-HUB', '20 Quai de la Loire', 'Nantes', 'France', 5200.00, 140, 210000.00, 'NATURAL_GAS', 200, FALSE, '3239f51e-fa52-4fe1-b4ad-3ef12da907c3', NOW(), NOW()),
-    ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaa5', 'Bordeaux Campus', 'BDX-CAMP', '25 Cours de l''Intendance', 'Bordeaux', 'France', 6800.00, 180, 275000.00, 'ELECTRICITY_GRID', 260, FALSE, '3239f51e-fa52-4fe1-b4ad-3ef12da907c3', NOW(), NOW());
+    ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaa4', 'Nantes Hub', 'NAN-HUB', '20 Quai de la Loire', 'Nantes', 'France', 5200.00, 140, 210000.00, 'NATURAL_GAS', 200, FALSE, '33333333-3333-3333-3333-333333333333', NOW(), NOW()),
+    ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaa5', 'Bordeaux Campus', 'BDX-CAMP', '25 Cours de l''Intendance', 'Bordeaux', 'France', 6800.00, 180, 275000.00, 'ELECTRICITY_GRID', 260, FALSE, '33333333-3333-3333-3333-333333333333', NOW(), NOW());
 
 INSERT INTO site_materials (
     id, site_id, material_type, material_label, quantity, unit,
@@ -21,8 +21,8 @@ INSERT INTO calculations (
     construction_emissions_kg_co2e, operation_emissions_kg_co2e, total_emissions_kg_co2e,
     co2_per_m2_kg, co2_per_employee_kg, factor_source, created_at
 ) VALUES
-    ('cccccccc-cccc-cccc-cccc-ccccccccc004', 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaa4', 1, '3239f51e-fa52-4fe1-b4ad-3ef12da907c3', 210000.00, 'NATURAL_GAS', 0.227000, 118400.000, 47670.000, 166070.000, 31.936538, 830.350000, 'Mock factors inspired by public ADEME Base Carbone references', NOW() - INTERVAL '2 days'),
-    ('cccccccc-cccc-cccc-cccc-ccccccccc005', 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaa5', 1, '3239f51e-fa52-4fe1-b4ad-3ef12da907c3', 275000.00, 'ELECTRICITY_GRID', 0.056000, 152400.000, 15400.000, 167800.000, 24.676471, 645.384615, 'Mock factors inspired by public ADEME Base Carbone references', NOW() - INTERVAL '1 day');
+    ('cccccccc-cccc-cccc-cccc-ccccccccc004', 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaa4', 1, '33333333-3333-3333-3333-333333333333', 210000.00, 'NATURAL_GAS', 0.227000, 118400.000, 47670.000, 166070.000, 31.936538, 830.350000, 'Mock factors inspired by public ADEME Base Carbone references', NOW() - INTERVAL '2 days'),
+    ('cccccccc-cccc-cccc-cccc-ccccccccc005', 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaa5', 1, '33333333-3333-3333-3333-333333333333', 275000.00, 'ELECTRICITY_GRID', 0.056000, 152400.000, 15400.000, 167800.000, 24.676471, 645.384615, 'Mock factors inspired by public ADEME Base Carbone references', NOW() - INTERVAL '1 day');
 
 INSERT INTO calculation_material_snapshots (
     id, calculation_id, material_type, material_label, quantity, unit,
