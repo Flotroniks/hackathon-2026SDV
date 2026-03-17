@@ -9,10 +9,10 @@ interface ResultSummaryCardProps {
 export function ResultSummaryCard({ result }: ResultSummaryCardProps) {
   return (
     <View style={styles.card}>
-      <Text style={styles.title}>Latest result</Text>
+      <Text style={styles.title}>Dernier résultat</Text>
       <Text style={styles.main}>{formatKg(result.totalEmissionsKgCo2e)}</Text>
       <Text style={styles.detail}>Construction: {formatKg(result.constructionEmissionsKgCo2e)}</Text>
-      <Text style={styles.detail}>Operation: {formatKg(result.operationEmissionsKgCo2e)}</Text>
+      <Text style={styles.detail}>Exploitation: {formatKg(result.operationEmissionsKgCo2e)}</Text>
       <Text style={styles.detail}>CO2/m2: {result.co2PerM2Kg.toFixed(3)} kg</Text>
     </View>
   );

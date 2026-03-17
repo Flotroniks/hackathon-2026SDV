@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const client = axios.create({
-  baseURL: process.env.EXPO_PUBLIC_API_BASE_URL ?? 'http://localhost:8080/api/v1',
+  baseURL: process.env.EXPO_PUBLIC_API_BASE_URL ?? 'http://localhost:8088/api/v1',
 });
 
 export function setAuthToken(token: string | null) {

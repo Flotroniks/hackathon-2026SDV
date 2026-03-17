@@ -13,19 +13,19 @@ export function LoginScreen() {
     try {
       await signIn(email, password);
     } catch {
-      setError('Authentication failed');
+      setError('Échec de connexion');
     }
   }
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Carbon Platform</Text>
-      <Text style={styles.subtitle}>Field mobile login</Text>
-      <TextInput style={styles.input} value={email} onChangeText={setEmail} autoCapitalize="none" />
-      <TextInput style={styles.input} value={password} onChangeText={setPassword} secureTextEntry />
+      <Text style={styles.subtitle}>Connexion mobile terrain</Text>
+      <TextInput style={styles.input} placeholder="Email" placeholderTextColor="#999" value={email} onChangeText={setEmail} autoCapitalize="none" />
+      <TextInput style={styles.input} placeholder="Mot de passe" placeholderTextColor="#999" value={password} onChangeText={setPassword} secureTextEntry />
       {error ? <Text style={styles.error}>{error}</Text> : null}
       <Pressable style={styles.button} onPress={submit}>
-        <Text style={styles.buttonLabel}>Sign in</Text>
+        <Text style={styles.buttonLabel}>Se connecter</Text>
       </Pressable>
     </View>
   );

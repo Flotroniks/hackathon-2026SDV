@@ -37,7 +37,7 @@ export function SiteResultScreen({ route }: Props) {
       const latest = await calculateSite(siteId);
       setResult(latest);
     } catch {
-      Alert.alert('Error', 'Unable to run calculation');
+      Alert.alert('Erreur', 'Impossible de lancer le calcul');
     }
   }
 
@@ -45,9 +45,9 @@ export function SiteResultScreen({ route }: Props) {
     <ScrollView style={styles.container} contentContainerStyle={{ gap: 12, paddingBottom: 24 }}>
       <Text style={styles.title}>{siteName}</Text>
       {isLoading ? <ActivityIndicator /> : null}
-      {result ? <ResultSummaryCard result={result} /> : <Text style={styles.empty}>No saved result yet.</Text>}
+      {result ? <ResultSummaryCard result={result} /> : <Text style={styles.empty}>Aucun résultat enregistré.</Text>}
       <Pressable style={styles.button} onPress={runCalculation}>
-        <Text style={styles.buttonLabel}>Run calculation</Text>
+        <Text style={styles.buttonLabel}>Lancer le calcul</Text>
       </Pressable>
     </ScrollView>
   );

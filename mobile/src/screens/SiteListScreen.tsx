@@ -26,10 +26,10 @@ export function SiteListScreen({ navigation }: Props) {
         <Text style={styles.title}>Sites</Text>
         <View style={styles.actions}>
           <Pressable style={styles.secondary} onPress={() => navigation.navigate('SiteForm')}>
-            <Text style={styles.secondaryLabel}>+ Quick add</Text>
+            <Text style={styles.secondaryLabel}>+ Ajouter</Text>
           </Pressable>
           <Pressable style={styles.ghost} onPress={() => signOut()}>
-            <Text style={styles.ghostLabel}>Logout</Text>
+            <Text style={styles.ghostLabel}>Déconnexion</Text>
           </Pressable>
         </View>
       </View>

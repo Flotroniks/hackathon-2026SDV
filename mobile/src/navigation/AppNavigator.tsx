@@ -2,12 +2,14 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ActivityIndicator, View } from 'react-native';
 import { useAuth } from '../context/AuthContext';
 import { LoginScreen } from '../screens/LoginScreen';
+import { DashboardScreen } from '../screens/DashboardScreen';
 import { SiteFormScreen } from '../screens/SiteFormScreen';
 import { SiteListScreen } from '../screens/SiteListScreen';
 import { SiteResultScreen } from '../screens/SiteResultScreen';
 
 export type RootStackParamList = {
   Login: undefined;
+  Dashboard: undefined;
   Sites: undefined;
   SiteForm: undefined;
   SiteResult: { siteId: string; siteName: string };
@@ -30,9 +32,10 @@ export function AppNavigator() {
     <Stack.Navigator>
       {token ? (
         <>
-          <Stack.Screen name="Sites" component={SiteListScreen} />
-          <Stack.Screen name="SiteForm" component={SiteFormScreen} options={{ title: 'Quick site capture' }} />
-          <Stack.Screen name="SiteResult" component={SiteResultScreen} options={{ title: 'Carbon result' }} />
+          <Stack.Screen name="Dashboard" component={DashboardScreen} options={{ title: 'Carbon Platform' }} />
+          <Stack.Screen name="Sites" component={SiteListScreen} options={{ title: 'Mes sites' }} />
+          <Stack.Screen name="SiteForm" component={SiteFormScreen} options={{ title: 'Nouveau site' }} />
+          <Stack.Screen name="SiteResult" component={SiteResultScreen} options={{ title: 'Résultat carbone' }} />
         </>
       ) : (
         <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
