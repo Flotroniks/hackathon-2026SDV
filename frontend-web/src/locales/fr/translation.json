@@ -1,0 +1,417 @@
+{
+  "common": {
+    "language": "Langue",
+    "french": "Francais",
+    "english": "Anglais",
+    "mode": "Mode",
+    "creation": "Creation",
+    "edition": "Edition",
+    "saving": "Enregistrement...",
+    "cancel": "Annuler",
+    "loading": "Chargement...",
+    "na": "N/A",
+    "units": {
+      "m2": "m2",
+      "kg": "kg",
+      "kgco2e": "kgCO2e",
+      "tco2e": "tCO2e",
+      "tonShort": "t"
+    },
+    "actions": {
+      "view": "Voir",
+      "edit": "Modifier",
+      "archive": "Archiver",
+      "refresh": "Rafraichir"
+    },
+    "status": {
+      "active": "Actif",
+      "inactive": "Inactif"
+    }
+  },
+  "navbar": {
+    "brand": "Carbon Platform",
+    "logout": "Deconnexion",
+    "links": {
+      "dashboard": "Tableau de bord",
+      "sites": "Sites",
+      "comparison": "Comparaison",
+      "profile": "Profil"
+    }
+  },
+  "layout": {
+    "subtitle": "Pilotage carbone multi-sites",
+    "navigation": "Navigation"
+  },
+  "notFound": {
+    "message": "Page introuvable",
+    "backToDashboard": "Retour au tableau de bord"
+  },
+  "dashboard": {
+    "overline": "Vue globale",
+    "pageTitle": "Tableau de bord carbone",
+    "pageSubtitle": "Suivez les emissions de vos sites, comparez les tendances et priorisez les actions de reduction.",
+    "referenceSite": "Site de reference",
+    "referenceSiteHint": "Les donnees ci-dessous sont rattachees au site selectionne.",
+    "selectSite": "Selectionner un site",
+    "mockSiteName": "Site Demo Hackathon",
+    "actions": {
+      "refresh": "Actualiser"
+    },
+    "kpi": {
+      "calculations": "Calculs disponibles",
+      "activeSites": "{{count}} sites suivis"
+    },
+    "metric": {
+      "total": "Empreinte carbone globale",
+      "avgCo2PerM2": "Moyenne CO2/m2",
+      "version": "Version v{{version}}"
+    },
+    "messages": {
+      "noDataUsingMock": "Aucun calcul disponible: affichage de donnees mock pour la demo.",
+      "apiUnavailableUsingMock": "API indisponible: affichage de donnees mock pour la demo."
+    },
+    "sections": {
+      "breakdown": {
+        "title": "Repartition des emissions",
+        "subtitle": "Part construction vs exploitation"
+      },
+      "materials": {
+        "title": "Emissions par materiau",
+        "subtitle": "Postes materiaux les plus emetteurs"
+      },
+      "history": {
+        "title": "Evolution des emissions",
+        "subtitle": "Vision temporelle des calculs enregistres",
+        "lastUpdate": "Derniere mise a jour"
+      },
+      "sites": {
+        "title": "Sites suivis",
+        "subtitle": "Classement rapide des sites les plus emetteurs"
+      }
+    },
+    "table": {
+      "site": "Site",
+      "total": "Emissions totales",
+      "co2PerM2": "CO2/m2",
+      "updatedAt": "Mise a jour"
+    },
+    "empty": {
+      "materialsTitle": "Aucune repartition materiaux",
+      "materialsDescription": "Ajoutez ou recalculez les donnees de construction pour afficher les materiaux dominants.",
+      "historyTitle": "Historique indisponible",
+      "historyDescription": "Lancez de nouveaux calculs pour commencer a visualiser la tendance carbone.",
+      "noSites": "Aucun site disponible pour le moment."
+    },
+    "materials": {
+      "concrete": "Beton",
+      "steel": "Acier",
+      "glass": "Verre",
+      "wood": "Bois",
+      "other": "Autres"
+    }
+  },
+  "dashboardPage": {
+    "kpi": {
+      "sites": "Sites",
+      "calculations": "Calculs",
+      "totalCo2": "CO2 total",
+      "avgCo2m2": "CO2 moyen / m2"
+    },
+    "breakdownTitle": "Construction vs Exploitation",
+    "topSitesTitle": "Sites les plus emetteurs",
+    "table": {
+      "site": "Site",
+      "total": "Total",
+      "co2m2": "CO2/m2",
+      "updated": "Mis a jour"
+    }
+  },
+  "kpi": {
+    "totalCo2": "CO2 total",
+    "co2PerM2": "CO2 par m2",
+    "co2PerEmployee": "CO2 par employe",
+    "constructionVsOperation": "Construction vs Exploitation"
+  },
+  "charts": {
+    "construction": "Construction",
+    "operation": "Exploitation",
+    "exploitation": "Exploitation",
+    "total": "Total"
+  },
+  "comparison": {
+    "title": "Comparaison multi-sites",
+    "subtitle": "Choisissez 2 a 5 sites et comparez leurs derniers calculs enregistres.",
+    "error": "Comparaison impossible. Selectionnez 2 a 5 sites avec des calculs existants.",
+    "actions": {
+      "compare": "Comparer"
+    },
+    "stats": {
+      "avgTotal": "Moyenne des emissions totales",
+      "lowestSite": "Site le moins emetteur"
+    },
+    "chartTitle": "Emissions totales par site",
+    "table": {
+      "site": "Site",
+      "total": "Total",
+      "construction": "Construction",
+      "operation": "Exploitation",
+      "co2m2": "CO2/m2",
+      "co2employee": "CO2/employe"
+    }
+  },
+  "sites": {
+    "title": "Sites",
+    "newSite": "+ Nouveau site",
+    "table": {
+      "code": "Code",
+      "name": "Nom",
+      "city": "Ville",
+      "area": "Surface",
+      "employees": "Employes",
+      "latestCo2": "Dernier CO2",
+      "updated": "Mis a jour"
+    },
+    "archiveModal": {
+      "title": "Archiver le site",
+      "message": "Cette action masque le site des listes actives mais conserve l'historique des calculs."
+    }
+  },
+  "siteFormPage": {
+    "createTitle": "Creer un site",
+    "editTitle": "Modifier le site",
+    "actions": {
+      "create": "Creer le site",
+      "update": "Mettre a jour le site"
+    },
+    "errors": {
+      "saveFailed": "Impossible d'enregistrer le site"
+    }
+  },
+  "siteForm": {
+    "fields": {
+      "name": "Nom du site",
+      "code": "Code",
+      "address": "Adresse",
+      "city": "Ville",
+      "country": "Pays",
+      "area": "Surface (m2)",
+      "parkingSpaces": "Places de parking",
+      "annualEnergy": "Energie annuelle (kWh)",
+      "employeeCount": "Employes"
+    },
+    "energySource": {
+      "ELECTRICITY_GRID": "Electricite reseau",
+      "NATURAL_GAS": "Gaz naturel",
+      "DISTRICT_HEATING": "Chauffage urbain",
+      "FUEL_OIL": "Fioul"
+    }
+  },
+  "materialFields": {
+    "title": "Materiaux",
+    "add": "+ Ajouter un materiau",
+    "remove": "X",
+    "labelPlaceholder": "Libelle",
+    "newMaterialLabel": "Nouveau materiau",
+    "types": {
+      "CONCRETE": "Beton",
+      "STEEL": "Acier",
+      "GLASS": "Verre",
+      "WOOD": "Bois",
+      "ALUMINUM": "Aluminium",
+      "BRICK": "Brique"
+    }
+  },
+  "profile": {
+    "title": "Profil",
+    "adminOnly": "La gestion des utilisateurs est reservee aux administrateurs.",
+    "roles": {
+      "user": "Utilisateur",
+      "admin": "Administrateur"
+    },
+    "labels": {
+      "name": "Nom",
+      "email": "Email",
+      "role": "Role",
+      "status": "Statut"
+    },
+    "errors": {
+      "loadUsers": "Impossible de charger les utilisateurs",
+      "createUser": "Impossible de creer l'utilisateur",
+      "passwordMinLength": "Le mot de passe doit contenir au moins 8 caracteres"
+    },
+    "success": {
+      "userCreated": "Utilisateur cree ({{role}})"
+    },
+    "createUser": {
+      "title": "Creer un utilisateur",
+      "subtitle": "Vous pouvez creer des utilisateurs standards ou des administrateurs. La creation d'un admin demande une confirmation explicite.",
+      "fields": {
+        "fullName": "Nom complet",
+        "email": "Email",
+        "password": "Mot de passe temporaire"
+      },
+      "actions": {
+        "create": "Creer {{role}}"
+      }
+    },
+    "users": {
+      "title": "Utilisateurs",
+      "table": {
+        "name": "Nom",
+        "email": "Email",
+        "role": "Role",
+        "status": "Statut"
+      }
+    },
+    "confirmAdmin": {
+      "title": "Confirmer la creation admin",
+      "messageStart": "Vous allez creer un compte",
+      "messageFor": "pour",
+      "thisUser": "cet utilisateur",
+      "warning": "Cet utilisateur aura un acces complet a la gestion des utilisateurs et aux parametres de la plateforme.",
+      "confirm": "Confirmer la creation ADMIN"
+    }
+  },
+  "login": {
+    "subtitle": {
+      "bootstrap": "Premiere connexion: creez le premier compte administrateur",
+      "firstPassword": "Premiere connexion: choisissez votre mot de passe admin",
+      "default": "Connexion MVP Hackathon"
+    },
+    "fields": {
+      "fullName": "Nom complet",
+      "email": "Email",
+      "password": "Mot de passe",
+      "confirmPassword": "Confirmer le mot de passe",
+      "newPassword": "Nouveau mot de passe",
+      "confirmNewPassword": "Confirmer le nouveau mot de passe"
+    },
+    "actions": {
+      "createAdmin": "Creer le compte admin",
+      "savePassword": "Enregistrer le mot de passe",
+      "login": "Connexion"
+    },
+    "errors": {
+      "loadState": "Impossible de charger l'etat d'authentification",
+      "invalidCredentials": "Identifiants invalides",
+      "passwordMinLength": "Le mot de passe doit contenir au moins 8 caracteres",
+      "passwordMismatch": "Les mots de passe ne correspondent pas",
+      "changePassword": "Impossible de changer le mot de passe",
+      "createFirstAdmin": "Impossible de creer le premier compte admin"
+    }
+  },
+  "siteResult": {
+    "actions": {
+      "runCalculation": "Lancer le calcul"
+    },
+    "errors": {
+      "calculationFailed": "Le calcul a echoue",
+      "siteNotFound": "Site introuvable"
+    },
+    "kpi": {
+      "total": "Total",
+      "construction": "Construction",
+      "operation": "Exploitation",
+      "co2m2": "CO2 / m2"
+    },
+    "noCalculation": "Aucun calcul pour le moment. Cliquez sur \"Lancer le calcul\" pour generer le premier resultat.",
+    "history": {
+      "title": "Historique des calculs",
+      "version": "Version",
+      "total": "Total",
+      "construction": "Construction",
+      "operation": "Exploitation",
+      "date": "Date"
+    },
+    "operations": {
+      "title": "Donnees d'exploitation",
+      "success": "Donnees d'exploitation enregistrees.",
+      "error": "Impossible d'enregistrer les donnees d'exploitation. Verifiez le backend."
+    }
+  },
+  "exploitationForm": {
+    "title": "Donnees d'exploitation du site",
+    "siteLabel": "Site",
+    "siteFallback": "Site non renseigne",
+    "siteBindingHint": "Les donnees sont rattachees automatiquement au site courant.",
+    "section": {
+      "energy": {
+        "title": "Energie",
+        "help": "Consommation annuelle et source principale.",
+        "annualConsumption": "Consommation energetique annuelle",
+        "energyType": "Type d'energie",
+        "energyTypeHelp": "Choisir la source majoritaire",
+        "unit": "Unite: kWh"
+      },
+      "occupation": {
+        "title": "Occupation",
+        "employeeCount": "Nombre d'employes",
+        "employeeCountHelp": "Equivalent present sur site",
+        "occupancyRate": "Taux d'occupation",
+        "occupancyRateUnit": "Unite: %"
+      },
+      "transport": {
+        "title": "Transport",
+        "parkingSpaces": "Nombre de places de parking",
+        "parkingSpacesHelp": "Capacite totale du site",
+        "commutingDistance": "Distance domicile-travail",
+        "commutingDistanceUnit": "Unite: km/jour/employe"
+      },
+      "equipment": {
+        "title": "Equipements",
+        "itEquipmentCount": "Nombre d'equipements informatiques",
+        "itEquipmentCountHelp": "PC, ecrans, serveurs, peripheriques",
+        "estimatedItConsumption": "Consommation IT estimee (optionnel)",
+        "estimatedItConsumptionUnit": "Unite: kWh/an"
+      },
+      "other": {
+        "title": "Autres",
+        "comment": "Commentaire",
+        "commentHelp": "Optionnel mais utile pour la tracabilite"
+      }
+    },
+    "placeholders": {
+      "annualConsumption": "ex: 120000",
+      "employeeCount": "ex: 85",
+      "occupancyRate": "ex: 90",
+      "parkingSpaces": "ex: 40",
+      "commutingDistance": "ex: 18",
+      "itEquipmentCount": "ex: 95",
+      "estimatedItConsumption": "ex: 12000",
+      "comment": "Contexte, saisonnalite, hypothese de collecte..."
+    },
+    "energyOptions": {
+      "electricity": "Electricite",
+      "gas": "Gaz",
+      "mix": "Mix"
+    },
+    "actions": {
+      "submit": "Enregistrer les donnees d'exploitation"
+    },
+    "messages": {
+      "missingSite": "Aucun site selectionne.",
+      "invalidForm": "Corrigez les erreurs du formulaire avant validation.",
+      "saveError": "Impossible d'enregistrer les donnees d'exploitation pour ce site.",
+      "saveSuccess": "Donnees d'exploitation enregistrees avec succes."
+    },
+    "errors": {
+      "annualConsumption": "Saisissez une consommation >= 0 kWh.",
+      "energyType": "Selectionnez un type d'energie.",
+      "employeeCount": "Saisissez un nombre d'employes >= 0.",
+      "occupancyRate": "Le taux doit etre compris entre 0 et 100%.",
+      "parkingSpaces": "Saisissez un nombre de places >= 0.",
+      "commutingDistance": "Saisissez une distance >= 0 km.",
+      "itEquipmentCount": "Saisissez un nombre d'equipements >= 0.",
+      "estimatedItConsumption": "La consommation IT doit etre >= 0 kWh."
+    }
+  },
+  "siteDetailExample": {
+    "title": "Fiche site",
+    "subtitle": "Saisie des donnees d'exploitation",
+    "meta": {
+      "code": "Code",
+      "location": "Localisation",
+      "area": "Surface"
+    }
+  }
+}

@@ -1,27 +1,53 @@
+import i18n from '../i18n';
+
+function getLocale() {
+  return i18n.language.startsWith('fr') ? 'fr-FR' : 'en-US';
+}
+
+function t(key: string, fallback: string) {
+  const translated = i18n.t(key);
+  return translated === key ? fallback : translated;
+}
+
 export function formatKg(value: number | null | undefined) {
   if (value === null || value === undefined) {
-    return 'N/A';
+    return t('common.na', 'N/A');
   }
 
   if (value >= 1000) {
-    return `${(value / 1000).toFixed(2)} tCO2e`;
+    const amount = Intl.NumberFormat(getLocale(), {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(value / 1000);
+    return `${amount} ${t('common.units.tco2e', 'tCO2e')}`;
   }
 
-  return `${value.toFixed(1)} kgCO2e`;
+  const amount = Intl.NumberFormat(getLocale(), {
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1,
+  }).format(value);
+  return `${amount} ${t('common.units.kgco2e', 'kgCO2e')}`;
+}
+
+export function formatKgCo2e(value: number | null | undefined) {
+  if (value === null || value === undefined) {
+    return t('common.na', 'N/A');
+  }
+  return `${formatNumber(value)} ${t('common.units.kgco2e', 'kgCO2e')}`;
 }
 
 export function formatDateTime(value: string | null | undefined) {
   if (!value) {
-    return 'N/A';
+    return t('common.na', 'N/A');
   }
 
-  return new Date(value).toLocaleString();
+  return new Date(value).toLocaleString(getLocale());
 }
 
 export function formatNumber(value: number | null | undefined) {
   if (value === null || value === undefined) {
-    return 'N/A';
+    return t('common.na', 'N/A');
   }
 
-  return Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }).format(value);
+  return Intl.NumberFormat(getLocale(), { maximumFractionDigits: 2 }).format(value);
 }

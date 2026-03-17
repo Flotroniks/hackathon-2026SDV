@@ -1,4 +1,20 @@
+import ApartmentRoundedIcon from '@mui/icons-material/ApartmentRounded';
+import EqualizerRoundedIcon from '@mui/icons-material/EqualizerRounded';
+import GroupsRoundedIcon from '@mui/icons-material/GroupsRounded';
+import RefreshRoundedIcon from '@mui/icons-material/RefreshRounded';
+import TuneRoundedIcon from '@mui/icons-material/TuneRounded';
+import {
+  Alert,
+  Box,
+  Button,
+  Grid,
+  MenuItem,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { fetchCalculationHistory, fetchLatestCalculation } from '../api/calculationApi';
 import { fetchDashboardSummary, fetchTopSites } from '../api/dashboardApi';
 import { EmissionDonutChart } from '../components/charts/EmissionDonutChart';
@@ -10,16 +26,22 @@ import {
   MaterialBarChart,
   type MaterialEmissionBarItem,
 } from '../components/charts/MaterialBarChart';
-import { AlertBanner } from '../components/common/AlertBanner';
-import { LoadingSpinner } from '../components/common/LoadingSpinner';
-import { KpiCards } from '../components/dashboard/KpiCards';
+import EmptyState from '../components/ui/EmptyState';
+import ErrorState from '../components/ui/ErrorState';
+import KpiCard from '../components/ui/KpiCard';
+import LoadingState from '../components/ui/LoadingState';
+import MetricHighlight from '../components/ui/MetricHighlight';
+import ModernTable, { type ModernTableColumn } from '../components/ui/ModernTable';
+import PageHeader from '../components/ui/PageHeader';
+import SectionCard from '../components/ui/SectionCard';
+import SiteSummaryCard from '../components/ui/SiteSummaryCard';
 import type {
   CalculationHistoryItemResponse,
   CalculationMaterialBreakdownResponse,
   CalculationResponse,
 } from '../types/calculation';
 import type { DashboardSummaryResponse, TopSiteResponse } from '../types/dashboard';
-import { formatDateTime } from '../utils/formatters';
+import { formatDateTime, formatKg, formatKgCo2e, formatNumber } from '../utils/formatters';
 
 const MOCK_SITE_NAME = 'Site Demo Hackathon';
 
@@ -58,37 +80,41 @@ const MOCK_SUMMARY: DashboardSummaryResponse = {
   totalOperationEmissionsKgCo2e: 310000,
 };
 
-function mapMaterials(materials: CalculationMaterialBreakdownResponse[]): MaterialEmissionBarItem[] {
+function mapMaterials(
+  materials: CalculationMaterialBreakdownResponse[],
+  t: (key: string) => string,
+): MaterialEmissionBarItem[] {
   const buckets: Record<string, number> = {
-    Beton: 0,
-    Acier: 0,
-    Verre: 0,
-    Bois: 0,
-    Autres: 0,
+    [t('dashboard.materials.concrete')]: 0,
+    [t('dashboard.materials.steel')]: 0,
+    [t('dashboard.materials.glass')]: 0,
+    [t('dashboard.materials.wood')]: 0,
+    [t('dashboard.materials.other')]: 0,
   };
 
   for (const material of materials) {
-    if (material.materialType === 'CONCRETE') buckets.Beton += material.emissionKgCo2e;
-    else if (material.materialType === 'STEEL') buckets.Acier += material.emissionKgCo2e;
-    else if (material.materialType === 'GLASS') buckets.Verre += material.emissionKgCo2e;
-    else if (material.materialType === 'WOOD') buckets.Bois += material.emissionKgCo2e;
-    else buckets.Autres += material.emissionKgCo2e;
+    if (material.materialType === 'CONCRETE') buckets[t('dashboard.materials.concrete')] += material.emissionKgCo2e;
+    else if (material.materialType === 'STEEL') buckets[t('dashboard.materials.steel')] += material.emissionKgCo2e;
+    else if (material.materialType === 'GLASS') buckets[t('dashboard.materials.glass')] += material.emissionKgCo2e;
+    else if (material.materialType === 'WOOD') buckets[t('dashboard.materials.wood')] += material.emissionKgCo2e;
+    else buckets[t('dashboard.materials.other')] += material.emissionKgCo2e;
   }
 
   return Object.entries(buckets).map(([material, emissions]) => ({ material, emissions }));
 }
 
-function mapHistory(history: CalculationHistoryItemResponse[]): EmissionHistoryPoint[] {
+function mapHistory(history: CalculationHistoryItemResponse[], locale: string): EmissionHistoryPoint[] {
   return history
     .slice()
     .sort((a, b) => new Date(a.calculatedAt).getTime() - new Date(b.calculatedAt).getTime())
     .map((item) => ({
-      date: new Date(item.calculatedAt).toLocaleDateString('fr-FR', { month: 'short', day: '2-digit' }),
+      date: new Date(item.calculatedAt).toLocaleDateString(locale, { month: 'short', day: '2-digit' }),
       totalEmissions: item.totalEmissionsKgCo2e,
     }));
 }
 
 export function Dashboard() {
+  const { t, i18n } = useTranslation();
   const [summary, setSummary] = useState<DashboardSummaryResponse | null>(null);
   const [topSites, setTopSites] = useState<TopSiteResponse[]>([]);
   const [selectedSiteId, setSelectedSiteId] = useState<string>('');
@@ -98,29 +124,35 @@ export function Dashboard() {
   const [error, setError] = useState('');
   const [usingMockData, setUsingMockData] = useState(false);
 
-  useEffect(() => {
-    Promise.all([fetchDashboardSummary(), fetchTopSites(8)])
-      .then(([summaryResponse, topSitesResponse]) => {
-        setSummary(summaryResponse);
-        setTopSites(topSitesResponse);
-        if (topSitesResponse.length > 0) {
-          setSelectedSiteId(topSitesResponse[0].siteId);
-        } else {
-          setLatestCalculation(MOCK_CALCULATION);
-          setHistory(MOCK_HISTORY);
-          setUsingMockData(true);
-          setError('Aucun calcul disponible: affichage de données mock pour la démo.');
-        }
-      })
-      .catch(() => {
-        setSummary(MOCK_SUMMARY);
+  async function loadDashboardBase() {
+    try {
+      const [summaryResponse, topSitesResponse] = await Promise.all([fetchDashboardSummary(), fetchTopSites(8)]);
+      setSummary(summaryResponse);
+      setTopSites(topSitesResponse);
+      setError('');
+      setUsingMockData(false);
+
+      if (topSitesResponse.length > 0) {
+        setSelectedSiteId((current) => current || topSitesResponse[0].siteId);
+      } else {
         setLatestCalculation(MOCK_CALCULATION);
         setHistory(MOCK_HISTORY);
         setUsingMockData(true);
-        setError('API indisponible: affichage de données mock pour la démo.');
-      })
-      .finally(() => setIsLoading(false));
-  }, []);
+        setError(t('dashboard.messages.noDataUsingMock'));
+      }
+    } catch {
+      setSummary(MOCK_SUMMARY);
+      setLatestCalculation(MOCK_CALCULATION);
+      setHistory(MOCK_HISTORY);
+      setUsingMockData(true);
+      setError(t('dashboard.messages.apiUnavailableUsingMock'));
+    }
+  }
+
+  useEffect(() => {
+    setIsLoading(true);
+    loadDashboardBase().finally(() => setIsLoading(false));
+  }, [t]);
 
   useEffect(() => {
     if (!selectedSiteId || usingMockData) {
@@ -136,93 +168,215 @@ export function Dashboard() {
         setLatestCalculation(MOCK_CALCULATION);
         setHistory(MOCK_HISTORY);
         setUsingMockData(true);
+        setError(t('dashboard.messages.apiUnavailableUsingMock'));
       });
-  }, [selectedSiteId, usingMockData]);
+  }, [selectedSiteId, t, usingMockData]);
 
   const materialData = useMemo<MaterialEmissionBarItem[]>(() => {
     if (!latestCalculation) {
       return [];
     }
-    return mapMaterials(latestCalculation.materialBreakdown);
-  }, [latestCalculation]);
+    return mapMaterials(latestCalculation.materialBreakdown, t);
+  }, [latestCalculation, t]);
 
-  const historyData = useMemo<EmissionHistoryPoint[]>(() => mapHistory(history), [history]);
+  const historyData = useMemo<EmissionHistoryPoint[]>(
+    () => mapHistory(history, i18n.language.startsWith('fr') ? 'fr-FR' : 'en-US'),
+    [history, i18n.language],
+  );
 
   const selectedSite = useMemo(
     () => topSites.find((site) => site.siteId === selectedSiteId) ?? null,
     [topSites, selectedSiteId],
   );
 
+  const siteRows = useMemo(() => topSites.slice(0, 6), [topSites]);
+
+  const siteColumns = useMemo<ModernTableColumn<TopSiteResponse>[]>(() => [
+    {
+      key: 'siteName',
+      label: t('dashboard.table.site'),
+      render: (site) => (
+        <Stack spacing={0.2}>
+          <Typography variant="body2" sx={{ fontWeight: 600 }}>{site.siteName}</Typography>
+          <Typography variant="caption" color="text.secondary">{site.siteCode}</Typography>
+        </Stack>
+      ),
+    },
+    {
+      key: 'totalEmissionsKgCo2e',
+      label: t('dashboard.table.total'),
+      align: 'right',
+      render: (site) => formatKg(site.totalEmissionsKgCo2e),
+    },
+    {
+      key: 'co2PerM2Kg',
+      label: t('dashboard.table.co2PerM2'),
+      align: 'right',
+      render: (site) => formatKgCo2e(site.co2PerM2Kg),
+    },
+    {
+      key: 'calculatedAt',
+      label: t('dashboard.table.updatedAt'),
+      align: 'right',
+      render: (site) => formatDateTime(site.calculatedAt),
+    },
+  ], [t]);
+
   if (isLoading || !summary || !latestCalculation) {
-    return <LoadingSpinner />;
+    return <LoadingState message={t('common.loading')} />;
   }
 
   return (
-    <div className="space-y-6">
-      {error ? <AlertBanner type="info" message={error} /> : null}
-
-      <KpiCards
-        totalEmissions={latestCalculation.totalEmissionsKgCo2e}
-        co2PerM2={latestCalculation.co2PerM2Kg}
-        co2PerEmployee={latestCalculation.co2PerEmployeeKg}
-        constructionEmissions={latestCalculation.constructionEmissionsKgCo2e}
-        exploitationEmissions={latestCalculation.operationEmissionsKgCo2e}
+    <Box>
+      <PageHeader
+        overline={t('dashboard.overline')}
+        title={t('dashboard.pageTitle')}
+        subtitle={t('dashboard.pageSubtitle')}
+        actions={(
+          <Button variant="outlined" startIcon={<RefreshRoundedIcon />} onClick={() => void loadDashboardBase()}>
+            {t('dashboard.actions.refresh')}
+          </Button>
+        )}
       />
 
-      <div className="card bg-base-200 shadow-sm">
-        <div className="card-body md:flex-row md:items-center md:justify-between">
-          <div>
-            <h2 className="card-title">Site de référence</h2>
-            <p className="text-sm text-base-content/70">
-              {selectedSite ? `${selectedSite.siteName} (${selectedSite.siteCode})` : MOCK_SITE_NAME}
-            </p>
-          </div>
-          {!usingMockData ? (
-            <select
-              className="select select-bordered w-full md:w-96"
-              value={selectedSiteId}
-              onChange={(event) => setSelectedSiteId(event.target.value)}
-            >
-              {topSites.map((site) => (
-                <option key={site.siteId} value={site.siteId}>
-                  {site.siteName} ({site.siteCode})
-                </option>
-              ))}
-            </select>
-          ) : null}
-        </div>
-      </div>
+      {error ? <Alert severity={usingMockData ? 'info' : 'error'} sx={{ mb: 3 }}>{error}</Alert> : null}
 
-      <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
-        <div className="card bg-base-200 shadow-sm">
-          <div className="card-body">
-            <h3 className="card-title">1. Répartition des émissions</h3>
-            <p className="text-sm text-base-content/70">Part construction vs exploitation</p>
+      <Grid container spacing={2} sx={{ mb: 2.25 }}>
+        <Grid size={{ xs: 12, md: 6, lg: 3 }}>
+          <KpiCard
+            title={t('kpi.totalCo2')}
+            value={formatKg(latestCalculation.totalEmissionsKgCo2e)}
+            icon={<EqualizerRoundedIcon fontSize="small" />}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 6, lg: 3 }}>
+          <KpiCard
+            title={t('kpi.co2PerM2')}
+            value={formatKgCo2e(latestCalculation.co2PerM2Kg)}
+            icon={<ApartmentRoundedIcon fontSize="small" />}
+            accentColor="#3E7BFA"
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 6, lg: 3 }}>
+          <KpiCard
+            title={t('kpi.co2PerEmployee')}
+            value={formatKgCo2e(latestCalculation.co2PerEmployeeKg)}
+            icon={<GroupsRoundedIcon fontSize="small" />}
+            accentColor="#D38B2C"
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 6, lg: 3 }}>
+          <KpiCard
+            title={t('dashboard.kpi.calculations')}
+            value={formatNumber(summary.calculationCount)}
+            caption={t('dashboard.kpi.activeSites', { count: summary.siteCount })}
+            icon={<TuneRoundedIcon fontSize="small" />}
+            accentColor="#4B5E77"
+          />
+        </Grid>
+      </Grid>
+
+      <Grid container spacing={2.2}>
+        <Grid size={12}>
+          <SiteSummaryCard
+            name={selectedSite?.siteName ?? t('dashboard.mockSiteName', { defaultValue: MOCK_SITE_NAME })}
+            code={selectedSite?.siteCode ?? 'DEMO'}
+            location={t('dashboard.referenceSiteHint')}
+            updatedAt={`${t('dashboard.sections.history.lastUpdate')}: ${formatDateTime(latestCalculation.calculatedAt)}`}
+            action={!usingMockData ? (
+              <TextField
+                select
+                label={t('dashboard.selectSite')}
+                value={selectedSiteId}
+                onChange={(event) => setSelectedSiteId(event.target.value)}
+                sx={{ minWidth: { xs: 220, md: 290 } }}
+              >
+                {topSites.map((site) => (
+                  <MenuItem key={site.siteId} value={site.siteId}>
+                    {site.siteName} ({site.siteCode})
+                  </MenuItem>
+                ))}
+              </TextField>
+            ) : undefined}
+          >
+            <MetricHighlight
+              title={t('dashboard.metric.total')}
+              value={formatKg(summary.totalEmissionsKgCo2e)}
+              helper={`${t('dashboard.metric.avgCo2PerM2')}: ${formatKgCo2e(summary.averageCo2PerM2Kg)}`}
+              chipLabel={t('dashboard.metric.version', { version: latestCalculation.versionNo })}
+              icon={<EqualizerRoundedIcon fontSize="small" />}
+            />
+          </SiteSummaryCard>
+        </Grid>
+
+        <Grid size={{ xs: 12, lg: 6 }}>
+          <SectionCard
+            title={t('dashboard.sections.breakdown.title')}
+            subtitle={t('dashboard.sections.breakdown.subtitle')}
+          >
             <EmissionDonutChart
               constructionEmissions={latestCalculation.constructionEmissionsKgCo2e}
               exploitationEmissions={latestCalculation.operationEmissionsKgCo2e}
             />
-          </div>
-        </div>
+          </SectionCard>
+        </Grid>
 
-        <div className="card bg-base-200 shadow-sm">
-          <div className="card-body">
-            <h3 className="card-title">2. Émissions par matériau</h3>
-            <p className="text-sm text-base-content/70">Postes matériaux les plus émetteurs</p>
-            <MaterialBarChart data={materialData} />
-          </div>
-        </div>
-      </div>
+        <Grid size={{ xs: 12, lg: 6 }}>
+          <SectionCard
+            title={t('dashboard.sections.materials.title')}
+            subtitle={t('dashboard.sections.materials.subtitle')}
+          >
+            {materialData.length === 0 ? (
+              <EmptyState
+                title={t('dashboard.empty.materialsTitle')}
+                description={t('dashboard.empty.materialsDescription')}
+              />
+            ) : (
+              <MaterialBarChart data={materialData} />
+            )}
+          </SectionCard>
+        </Grid>
 
-      <div className="card bg-base-200 shadow-sm">
-        <div className="card-body">
-          <h3 className="card-title">3. Évolution des émissions</h3>
-          <p className="text-sm text-base-content/70">
-            Dernière mise à jour: {formatDateTime(latestCalculation.calculatedAt)}
-          </p>
-          <EmissionHistoryChart data={historyData} />
-        </div>
-      </div>
-    </div>
+        <Grid size={12}>
+          <SectionCard
+            title={t('dashboard.sections.history.title')}
+            subtitle={t('dashboard.sections.history.subtitle')}
+          >
+            {historyData.length === 0 ? (
+              <EmptyState
+                title={t('dashboard.empty.historyTitle')}
+                description={t('dashboard.empty.historyDescription')}
+              />
+            ) : (
+              <EmissionHistoryChart data={historyData} />
+            )}
+          </SectionCard>
+        </Grid>
+
+        <Grid size={12}>
+          <SectionCard
+            title={t('dashboard.sections.sites.title')}
+            subtitle={t('dashboard.sections.sites.subtitle')}
+          >
+            {siteRows.length === 0 ? (
+              <ErrorState
+                message={t('dashboard.empty.noSites')}
+                retryLabel={t('dashboard.actions.refresh')}
+                onRetry={() => void loadDashboardBase()}
+              />
+            ) : (
+              <ModernTable
+                columns={siteColumns}
+                rows={siteRows}
+                getRowId={(row) => row.siteId}
+                emptyMessage={t('dashboard.empty.noSites')}
+              />
+            )}
+          </SectionCard>
+        </Grid>
+      </Grid>
+    </Box>
   );
 }
+
+export default Dashboard;

@@ -1,4 +1,5 @@
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
+import { useTranslation } from 'react-i18next';
 import { formatKg } from '../../utils/formatters';
 
 interface EmissionDonutChartProps {
@@ -12,9 +13,11 @@ export function EmissionDonutChart({
   constructionEmissions,
   exploitationEmissions,
 }: EmissionDonutChartProps) {
+  const { t } = useTranslation();
+
   const data = [
-    { name: 'Construction', value: constructionEmissions },
-    { name: 'Exploitation', value: exploitationEmissions },
+    { name: t('charts.construction'), value: constructionEmissions },
+    { name: t('charts.exploitation'), value: exploitationEmissions },
   ];
 
   const total = constructionEmissions + exploitationEmissions;
@@ -41,7 +44,7 @@ export function EmissionDonutChart({
           />
           <text x="50%" y="50%" textAnchor="middle" dominantBaseline="middle" className="fill-base-content">
             <tspan x="50%" dy="-0.4em" className="text-xs opacity-70">
-              Total
+              {t('charts.total')}
             </tspan>
             <tspan x="50%" dy="1.4em" className="text-base font-semibold">
               {formatKg(total)}

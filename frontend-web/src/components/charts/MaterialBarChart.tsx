@@ -1,4 +1,5 @@
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { useTranslation } from 'react-i18next';
 import { formatKg } from '../../utils/formatters';
 
 export interface MaterialEmissionBarItem {
@@ -11,13 +12,15 @@ interface MaterialBarChartProps {
 }
 
 export function MaterialBarChart({ data }: MaterialBarChartProps) {
+  const { t } = useTranslation();
+
   return (
     <div className="h-80 w-full">
       <ResponsiveContainer>
         <BarChart data={data} margin={{ top: 8, right: 8, left: 8, bottom: 16 }}>
           <CartesianGrid strokeDasharray="3 3" opacity={0.25} />
           <XAxis dataKey="material" angle={-20} textAnchor="end" height={56} tick={{ fontSize: 12 }} />
-          <YAxis tickFormatter={(value: number) => `${Math.round(value / 1000)}t`} />
+          <YAxis tickFormatter={(value: number) => `${Math.round(value / 1000)} ${t('common.units.tonShort')}`} />
           <Tooltip
             formatter={(value: number) => formatKg(value)}
             cursor={{ fill: 'rgba(15, 118, 110, 0.08)' }}

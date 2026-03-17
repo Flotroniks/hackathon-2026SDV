@@ -1,4 +1,5 @@
 import { materialTypeOptions, type MaterialInput } from '../../types/site';
+import { useTranslation } from 'react-i18next';
 
 interface MaterialFieldsProps {
   materials: MaterialInput[];
@@ -6,6 +7,8 @@ interface MaterialFieldsProps {
 }
 
 export function MaterialFields({ materials, onChange }: MaterialFieldsProps) {
+  const { t } = useTranslation();
+
   function updateMaterial(index: number, patch: Partial<MaterialInput>) {
     const next = materials.map((material, materialIndex) => {
       if (materialIndex !== index) {
@@ -21,7 +24,7 @@ export function MaterialFields({ materials, onChange }: MaterialFieldsProps) {
       ...materials,
       {
         materialType: 'CONCRETE',
-        materialLabel: 'New material',
+        materialLabel: t('materialFields.newMaterialLabel'),
         quantity: 1,
         unit: 'kg',
       },
@@ -35,9 +38,9 @@ export function MaterialFields({ materials, onChange }: MaterialFieldsProps) {
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold uppercase tracking-wide text-base-content/70">Materials</h3>
+        <h3 className="text-sm font-semibold uppercase tracking-wide text-base-content/70">{t('materialFields.title')}</h3>
         <button type="button" className="btn btn-sm btn-outline" onClick={addMaterial}>
-          + Add material
+          {t('materialFields.add')}
         </button>
       </div>
       {materials.map((material, index) => (
@@ -55,13 +58,13 @@ export function MaterialFields({ materials, onChange }: MaterialFieldsProps) {
           >
             {materialTypeOptions.map((option) => (
               <option key={option.value} value={option.value}>
-                {option.label}
+                {t(`materialFields.types.${option.value}`)}
               </option>
             ))}
           </select>
           <input
             className="input input-bordered md:col-span-4"
-            placeholder="Label"
+            placeholder={t('materialFields.labelPlaceholder')}
             value={material.materialLabel}
             onChange={(event) => updateMaterial(index, { materialLabel: event.target.value })}
           />
@@ -79,7 +82,7 @@ export function MaterialFields({ materials, onChange }: MaterialFieldsProps) {
             onChange={(event) => updateMaterial(index, { unit: event.target.value })}
           />
           <button type="button" className="btn btn-error md:col-span-1" onClick={() => removeMaterial(index)}>
-            x
+            {t('materialFields.remove')}
           </button>
         </div>
       ))}

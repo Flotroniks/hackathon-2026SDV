@@ -1,0 +1,417 @@
+{
+  "common": {
+    "language": "Language",
+    "french": "French",
+    "english": "English",
+    "mode": "Mode",
+    "creation": "Create",
+    "edition": "Edit",
+    "saving": "Saving...",
+    "cancel": "Cancel",
+    "loading": "Loading...",
+    "na": "N/A",
+    "units": {
+      "m2": "m2",
+      "kg": "kg",
+      "kgco2e": "kgCO2e",
+      "tco2e": "tCO2e",
+      "tonShort": "t"
+    },
+    "actions": {
+      "view": "View",
+      "edit": "Edit",
+      "archive": "Archive",
+      "refresh": "Refresh"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    }
+  },
+  "navbar": {
+    "brand": "Carbon Platform",
+    "logout": "Logout",
+    "links": {
+      "dashboard": "Dashboard",
+      "sites": "Sites",
+      "comparison": "Comparison",
+      "profile": "Profile"
+    }
+  },
+  "layout": {
+    "subtitle": "Multi-site carbon control center",
+    "navigation": "Navigation"
+  },
+  "notFound": {
+    "message": "Page not found",
+    "backToDashboard": "Back to dashboard"
+  },
+  "dashboard": {
+    "overline": "Global view",
+    "pageTitle": "Carbon performance dashboard",
+    "pageSubtitle": "Track emissions across your sites, compare trends, and prioritize high-impact reduction actions.",
+    "referenceSite": "Reference site",
+    "referenceSiteHint": "The analytics below are linked to the selected site.",
+    "selectSite": "Select a site",
+    "mockSiteName": "Hackathon demo site",
+    "actions": {
+      "refresh": "Refresh"
+    },
+    "kpi": {
+      "calculations": "Available calculations",
+      "activeSites": "{{count}} active sites"
+    },
+    "metric": {
+      "total": "Global carbon footprint",
+      "avgCo2PerM2": "Average CO2/m2",
+      "version": "Version v{{version}}"
+    },
+    "messages": {
+      "noDataUsingMock": "No available calculation: showing mock data for the demo.",
+      "apiUnavailableUsingMock": "API unavailable: showing mock data for the demo."
+    },
+    "sections": {
+      "breakdown": {
+        "title": "Emissions breakdown",
+        "subtitle": "Construction vs operation share"
+      },
+      "materials": {
+        "title": "Emissions by material",
+        "subtitle": "Most emitting material categories"
+      },
+      "history": {
+        "title": "Emissions trend",
+        "subtitle": "Timeline of saved calculation runs",
+        "lastUpdate": "Last update"
+      },
+      "sites": {
+        "title": "Monitored sites",
+        "subtitle": "Quick ranking of the most emitting sites"
+      }
+    },
+    "table": {
+      "site": "Site",
+      "total": "Total emissions",
+      "co2PerM2": "CO2/m2",
+      "updatedAt": "Updated at"
+    },
+    "empty": {
+      "materialsTitle": "No material breakdown available",
+      "materialsDescription": "Add or recalculate construction data to display the dominant material categories.",
+      "historyTitle": "No history available",
+      "historyDescription": "Run new calculations to start visualizing your carbon trend.",
+      "noSites": "No sites available yet."
+    },
+    "materials": {
+      "concrete": "Concrete",
+      "steel": "Steel",
+      "glass": "Glass",
+      "wood": "Wood",
+      "other": "Other"
+    }
+  },
+  "dashboardPage": {
+    "kpi": {
+      "sites": "Sites",
+      "calculations": "Calculations",
+      "totalCo2": "Total CO2",
+      "avgCo2m2": "Avg CO2 / m2"
+    },
+    "breakdownTitle": "Construction vs Operation",
+    "topSitesTitle": "Top emitting sites",
+    "table": {
+      "site": "Site",
+      "total": "Total",
+      "co2m2": "CO2/m2",
+      "updated": "Updated"
+    }
+  },
+  "kpi": {
+    "totalCo2": "Total CO2",
+    "co2PerM2": "CO2 per m2",
+    "co2PerEmployee": "CO2 per employee",
+    "constructionVsOperation": "Construction vs Operation"
+  },
+  "charts": {
+    "construction": "Construction",
+    "operation": "Operation",
+    "exploitation": "Operation",
+    "total": "Total"
+  },
+  "comparison": {
+    "title": "Multi-site comparison",
+    "subtitle": "Choose 2 to 5 sites and compare their latest saved calculations.",
+    "error": "Comparison failed. Select 2 to 5 sites with existing calculations.",
+    "actions": {
+      "compare": "Compare"
+    },
+    "stats": {
+      "avgTotal": "Average total emissions",
+      "lowestSite": "Lowest emitting site"
+    },
+    "chartTitle": "Total emissions by site",
+    "table": {
+      "site": "Site",
+      "total": "Total",
+      "construction": "Construction",
+      "operation": "Operation",
+      "co2m2": "CO2/m2",
+      "co2employee": "CO2/employee"
+    }
+  },
+  "sites": {
+    "title": "Sites",
+    "newSite": "+ New site",
+    "table": {
+      "code": "Code",
+      "name": "Name",
+      "city": "City",
+      "area": "Area",
+      "employees": "Employees",
+      "latestCo2": "Latest CO2",
+      "updated": "Updated"
+    },
+    "archiveModal": {
+      "title": "Archive site",
+      "message": "This action hides the site from active lists but preserves calculation history."
+    }
+  },
+  "siteFormPage": {
+    "createTitle": "Create site",
+    "editTitle": "Edit site",
+    "actions": {
+      "create": "Create site",
+      "update": "Update site"
+    },
+    "errors": {
+      "saveFailed": "Unable to save site"
+    }
+  },
+  "siteForm": {
+    "fields": {
+      "name": "Site name",
+      "code": "Code",
+      "address": "Address",
+      "city": "City",
+      "country": "Country",
+      "area": "Area (m2)",
+      "parkingSpaces": "Parking spaces",
+      "annualEnergy": "Annual energy (kWh)",
+      "employeeCount": "Employees"
+    },
+    "energySource": {
+      "ELECTRICITY_GRID": "Grid electricity",
+      "NATURAL_GAS": "Natural gas",
+      "DISTRICT_HEATING": "District heating",
+      "FUEL_OIL": "Fuel oil"
+    }
+  },
+  "materialFields": {
+    "title": "Materials",
+    "add": "+ Add material",
+    "remove": "X",
+    "labelPlaceholder": "Label",
+    "newMaterialLabel": "New material",
+    "types": {
+      "CONCRETE": "Concrete",
+      "STEEL": "Steel",
+      "GLASS": "Glass",
+      "WOOD": "Wood",
+      "ALUMINUM": "Aluminum",
+      "BRICK": "Brick"
+    }
+  },
+  "profile": {
+    "title": "Profile",
+    "adminOnly": "User management is available only for admins.",
+    "roles": {
+      "user": "User",
+      "admin": "Admin"
+    },
+    "labels": {
+      "name": "Name",
+      "email": "Email",
+      "role": "Role",
+      "status": "Status"
+    },
+    "errors": {
+      "loadUsers": "Unable to load users",
+      "createUser": "Unable to create user",
+      "passwordMinLength": "Password must contain at least 8 characters"
+    },
+    "success": {
+      "userCreated": "User created ({{role}})"
+    },
+    "createUser": {
+      "title": "Create user",
+      "subtitle": "You can create normal users or admins. Creating an admin requires explicit confirmation.",
+      "fields": {
+        "fullName": "Full name",
+        "email": "Email",
+        "password": "Temporary password"
+      },
+      "actions": {
+        "create": "Create {{role}}"
+      }
+    },
+    "users": {
+      "title": "Users",
+      "table": {
+        "name": "Name",
+        "email": "Email",
+        "role": "Role",
+        "status": "Status"
+      }
+    },
+    "confirmAdmin": {
+      "title": "Confirm admin creation",
+      "messageStart": "You are about to create an",
+      "messageFor": "account for",
+      "thisUser": "this user",
+      "warning": "This user will have full access to user management and platform settings.",
+      "confirm": "Confirm ADMIN creation"
+    }
+  },
+  "login": {
+    "subtitle": {
+      "bootstrap": "First connection: create the first admin account",
+      "firstPassword": "First connection: choose your admin password",
+      "default": "Hackathon MVP login"
+    },
+    "fields": {
+      "fullName": "Full name",
+      "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Confirm password",
+      "newPassword": "New password",
+      "confirmNewPassword": "Confirm new password"
+    },
+    "actions": {
+      "createAdmin": "Create Admin Account",
+      "savePassword": "Save Password",
+      "login": "Login"
+    },
+    "errors": {
+      "loadState": "Unable to load authentication state",
+      "invalidCredentials": "Invalid credentials",
+      "passwordMinLength": "Password must contain at least 8 characters",
+      "passwordMismatch": "Passwords do not match",
+      "changePassword": "Unable to change password",
+      "createFirstAdmin": "Unable to create first admin account"
+    }
+  },
+  "siteResult": {
+    "actions": {
+      "runCalculation": "Run calculation"
+    },
+    "errors": {
+      "calculationFailed": "Calculation failed",
+      "siteNotFound": "Site not found"
+    },
+    "kpi": {
+      "total": "Total",
+      "construction": "Construction",
+      "operation": "Operation",
+      "co2m2": "CO2 / m2"
+    },
+    "noCalculation": "No calculation yet. Click \"Run calculation\" to generate the first result.",
+    "history": {
+      "title": "Calculation history",
+      "version": "Version",
+      "total": "Total",
+      "construction": "Construction",
+      "operation": "Operation",
+      "date": "Date"
+    },
+    "operations": {
+      "title": "Operations data",
+      "success": "Operations data saved.",
+      "error": "Unable to save operations data. Check backend connectivity."
+    }
+  },
+  "exploitationForm": {
+    "title": "Site operations data",
+    "siteLabel": "Site",
+    "siteFallback": "Unknown site",
+    "siteBindingHint": "Data is automatically linked to the current site.",
+    "section": {
+      "energy": {
+        "title": "Energy",
+        "help": "Annual consumption and main energy source.",
+        "annualConsumption": "Annual energy consumption",
+        "energyType": "Energy type",
+        "energyTypeHelp": "Select the main source",
+        "unit": "Unit: kWh"
+      },
+      "occupation": {
+        "title": "Occupation",
+        "employeeCount": "Number of employees",
+        "employeeCountHelp": "Estimated on-site workforce",
+        "occupancyRate": "Occupancy rate",
+        "occupancyRateUnit": "Unit: %"
+      },
+      "transport": {
+        "title": "Transport",
+        "parkingSpaces": "Number of parking spaces",
+        "parkingSpacesHelp": "Total site capacity",
+        "commutingDistance": "Home-work commuting distance",
+        "commutingDistanceUnit": "Unit: km/day/employee"
+      },
+      "equipment": {
+        "title": "Equipment",
+        "itEquipmentCount": "Number of IT devices",
+        "itEquipmentCountHelp": "Computers, screens, servers, peripherals",
+        "estimatedItConsumption": "Estimated IT consumption (optional)",
+        "estimatedItConsumptionUnit": "Unit: kWh/year"
+      },
+      "other": {
+        "title": "Other",
+        "comment": "Comment",
+        "commentHelp": "Optional but useful for traceability"
+      }
+    },
+    "placeholders": {
+      "annualConsumption": "e.g. 120000",
+      "employeeCount": "e.g. 85",
+      "occupancyRate": "e.g. 90",
+      "parkingSpaces": "e.g. 40",
+      "commutingDistance": "e.g. 18",
+      "itEquipmentCount": "e.g. 95",
+      "estimatedItConsumption": "e.g. 12000",
+      "comment": "Context, seasonality, data assumptions..."
+    },
+    "energyOptions": {
+      "electricity": "Electricity",
+      "gas": "Gas",
+      "mix": "Mixed"
+    },
+    "actions": {
+      "submit": "Save operations data"
+    },
+    "messages": {
+      "missingSite": "No site selected.",
+      "invalidForm": "Please fix form errors before submitting.",
+      "saveError": "Unable to save operations data for this site.",
+      "saveSuccess": "Operations data saved successfully."
+    },
+    "errors": {
+      "annualConsumption": "Enter a value >= 0 kWh.",
+      "energyType": "Select an energy type.",
+      "employeeCount": "Enter an employee count >= 0.",
+      "occupancyRate": "Rate must be between 0 and 100%.",
+      "parkingSpaces": "Enter parking spaces >= 0.",
+      "commutingDistance": "Enter a distance >= 0 km.",
+      "itEquipmentCount": "Enter an IT equipment count >= 0.",
+      "estimatedItConsumption": "IT consumption must be >= 0 kWh."
+    }
+  },
+  "siteDetailExample": {
+    "title": "Site details",
+    "subtitle": "Operations data input",
+    "meta": {
+      "code": "Code",
+      "location": "Location",
+      "area": "Area"
+    }
+  }
+}

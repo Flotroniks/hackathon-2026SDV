@@ -1,12 +1,15 @@
+import { CssBaseline, ThemeProvider } from '@mui/material';
 import { BrowserRouter } from 'react-router-dom';
 import { AppRouter } from './router';
+import appTheme from './theme/muiTheme';
 
 export default function App() {
   return (
-    <div data-theme="carbon" className="min-h-screen bg-base-200 text-base-content">
+    <ThemeProvider theme={appTheme}>
+      <CssBaseline />
       <BrowserRouter>
         <AppRouter />
       </BrowserRouter>
-    </div>
+    </ThemeProvider>
   );
 }

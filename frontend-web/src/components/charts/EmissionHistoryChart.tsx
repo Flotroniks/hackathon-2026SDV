@@ -1,4 +1,5 @@
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { useTranslation } from 'react-i18next';
 import { formatKg } from '../../utils/formatters';
 
 export interface EmissionHistoryPoint {
@@ -11,13 +12,15 @@ interface EmissionHistoryChartProps {
 }
 
 export function EmissionHistoryChart({ data }: EmissionHistoryChartProps) {
+  const { t } = useTranslation();
+
   return (
     <div className="h-80 w-full">
       <ResponsiveContainer>
         <LineChart data={data} margin={{ top: 8, right: 8, left: 8, bottom: 8 }}>
           <CartesianGrid strokeDasharray="3 3" opacity={0.25} />
           <XAxis dataKey="date" tick={{ fontSize: 12 }} />
-          <YAxis tickFormatter={(value: number) => `${Math.round(value / 1000)}t`} />
+          <YAxis tickFormatter={(value: number) => `${Math.round(value / 1000)} ${t('common.units.tonShort')}`} />
           <Tooltip
             formatter={(value: number) => formatKg(value)}
             contentStyle={{ borderRadius: 12, border: '1px solid #e5e7eb' }}

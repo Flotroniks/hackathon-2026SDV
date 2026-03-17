@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { createSite, fetchSite, updateSite } from '../api/siteApi';
 import { SiteForm } from '../components/forms/SiteForm';
 import { AlertBanner } from '../components/common/AlertBanner';
@@ -7,6 +8,7 @@ import { LoadingSpinner } from '../components/common/LoadingSpinner';
 import { emptySiteRequest, type SiteRequest } from '../types/site';
 
 export function SiteFormPage() {
+  const { t } = useTranslation();
   const params = useParams<{ siteId: string }>();
   const isEdit = Boolean(params.siteId);
   const navigate = useNavigate();
@@ -53,7 +55,7 @@ export function SiteFormPage() {
       const created = await createSite(payload);
       navigate(`/sites/${created.id}`);
     } catch {
-      setError('Unable to save site');
+      setError(t('siteFormPage.errors.saveFailed'));
     }
   }
 
@@ -63,9 +65,13 @@ export function SiteFormPage() {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-semibold">{isEdit ? 'Edit site' : 'Create site'}</h1>
+      <h1 className="text-2xl font-semibold">{isEdit ? t('siteFormPage.editTitle') : t('siteFormPage.createTitle')}</h1>
       {error ? <AlertBanner type="error" message={error} /> : null}
-      <SiteForm initialValue={initialValue} onSubmit={handleSubmit} submitLabel={isEdit ? 'Update site' : 'Create site'} />
+      <SiteForm
+        initialValue={initialValue}
+        onSubmit={handleSubmit}
+        submitLabel={isEdit ? t('siteFormPage.actions.update') : t('siteFormPage.actions.create')}
+      />
     </div>
   );
 }

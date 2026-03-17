@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { archiveSite, fetchSites } from '../api/siteApi';
 import type { SiteListItemResponse } from '../types/site';
 import { formatDateTime, formatKg, formatNumber } from '../utils/formatters';
@@ -7,6 +8,7 @@ import { LoadingSpinner } from '../components/common/LoadingSpinner';
 import { ConfirmModal } from '../components/common/ConfirmModal';
 
 export function SitesPage() {
+  const { t } = useTranslation();
   const [sites, setSites] = useState<SiteListItemResponse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedSiteId, setSelectedSiteId] = useState<string | null>(null);
@@ -38,22 +40,22 @@ export function SitesPage() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">Sites</h1>
+        <h1 className="text-2xl font-semibold">{t('sites.title')}</h1>
         <Link to="/sites/new" className="btn btn-primary">
-          + New site
+          {t('sites.newSite')}
         </Link>
       </div>
       <div className="overflow-x-auto rounded-xl bg-base-200">
         <table className="table table-zebra">
           <thead>
             <tr>
-              <th>Code</th>
-              <th>Name</th>
-              <th>City</th>
-              <th>Area</th>
-              <th>Employees</th>
-              <th>Latest CO2</th>
-              <th>Updated</th>
+              <th>{t('sites.table.code')}</th>
+              <th>{t('sites.table.name')}</th>
+              <th>{t('sites.table.city')}</th>
+              <th>{t('sites.table.area')}</th>
+              <th>{t('sites.table.employees')}</th>
+              <th>{t('sites.table.latestCo2')}</th>
+              <th>{t('sites.table.updated')}</th>
               <th />
             </tr>
           </thead>
@@ -63,16 +65,16 @@ export function SitesPage() {
                 <td>{site.code}</td>
                 <td>{site.name}</td>
                 <td>{site.city}</td>
-                <td>{formatNumber(site.totalAreaM2)} m2</td>
+                <td>{formatNumber(site.totalAreaM2)} {t('common.units.m2')}</td>
                 <td>{formatNumber(site.employeeCount)}</td>
                 <td>{formatKg(site.latestTotalEmissionsKgCo2e)}</td>
                 <td>{formatDateTime(site.latestCalculatedAt)}</td>
                 <td className="space-x-2">
                   <button className="btn btn-xs" onClick={() => navigate(`/sites/${site.id}`)}>
-                    View
+                    {t('common.actions.view')}
                   </button>
                   <button className="btn btn-xs btn-outline" onClick={() => navigate(`/sites/${site.id}/edit`)}>
-                    Edit
+                    {t('common.actions.edit')}
                   </button>
                   <button
                     className="btn btn-xs btn-error text-white"
@@ -82,7 +84,7 @@ export function SitesPage() {
                       modal?.showModal();
                     }}
                   >
-                    Archive
+                    {t('common.actions.archive')}
                   </button>
                 </td>
               </tr>
@@ -92,9 +94,9 @@ export function SitesPage() {
       </div>
       <ConfirmModal
         id="archive-site-modal"
-        title="Archive site"
-        message="This action hides the site from active lists but preserves calculation history."
-        actionLabel="Archive"
+        title={t('sites.archiveModal.title')}
+        message={t('sites.archiveModal.message')}
+        actionLabel={t('common.actions.archive')}
         onConfirm={onArchive}
       />
     </div>

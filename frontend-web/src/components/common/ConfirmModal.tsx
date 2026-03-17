@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+
 interface ConfirmModalProps {
   id: string;
   title: string;
@@ -7,6 +9,8 @@ interface ConfirmModalProps {
 }
 
 export function ConfirmModal({ id, title, message, actionLabel, onConfirm }: ConfirmModalProps) {
+  const { t } = useTranslation();
+
   return (
     <dialog id={id} className="modal">
       <div className="modal-box">
@@ -14,7 +18,7 @@ export function ConfirmModal({ id, title, message, actionLabel, onConfirm }: Con
         <p className="py-4">{message}</p>
         <div className="modal-action">
           <form method="dialog">
-            <button className="btn">Cancel</button>
+            <button className="btn">{t('common.cancel')}</button>
           </form>
           <button
             className="btn btn-error text-white"

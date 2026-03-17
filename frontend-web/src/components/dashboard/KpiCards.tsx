@@ -1,4 +1,5 @@
-import { formatKg, formatNumber } from '../../utils/formatters';
+import { formatKg, formatKgCo2e } from '../../utils/formatters';
+import { useTranslation } from 'react-i18next';
 
 interface KpiCardsProps {
   totalEmissions: number;
@@ -15,6 +16,7 @@ export function KpiCards({
   constructionEmissions,
   exploitationEmissions,
 }: KpiCardsProps) {
+  const { t } = useTranslation();
   const total = constructionEmissions + exploitationEmissions;
   const constructionShare = total > 0 ? (constructionEmissions / total) * 100 : 0;
   const exploitationShare = total > 0 ? (exploitationEmissions / total) * 100 : 0;
@@ -23,30 +25,30 @@ export function KpiCards({
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
       <div className="card bg-base-200 shadow-sm">
         <div className="card-body py-5">
-          <p className="text-xs uppercase tracking-wide text-base-content/70">CO2 total</p>
+          <p className="text-xs uppercase tracking-wide text-base-content/70">{t('kpi.totalCo2')}</p>
           <p className="text-2xl font-semibold text-primary">{formatKg(totalEmissions)}</p>
         </div>
       </div>
 
       <div className="card bg-base-200 shadow-sm">
         <div className="card-body py-5">
-          <p className="text-xs uppercase tracking-wide text-base-content/70">CO2 par m²</p>
-          <p className="text-2xl font-semibold">{formatNumber(co2PerM2)} kgCO2e</p>
+          <p className="text-xs uppercase tracking-wide text-base-content/70">{t('kpi.co2PerM2')}</p>
+          <p className="text-2xl font-semibold">{formatKgCo2e(co2PerM2)}</p>
         </div>
       </div>
 
       <div className="card bg-base-200 shadow-sm">
         <div className="card-body py-5">
-          <p className="text-xs uppercase tracking-wide text-base-content/70">CO2 par employé</p>
+          <p className="text-xs uppercase tracking-wide text-base-content/70">{t('kpi.co2PerEmployee')}</p>
           <p className="text-2xl font-semibold">
-            {co2PerEmployee === null ? 'N/A' : `${formatNumber(co2PerEmployee)} kgCO2e`}
+            {formatKgCo2e(co2PerEmployee)}
           </p>
         </div>
       </div>
 
       <div className="card bg-base-200 shadow-sm">
         <div className="card-body py-5">
-          <p className="text-xs uppercase tracking-wide text-base-content/70">Construction vs Exploitation</p>
+          <p className="text-xs uppercase tracking-wide text-base-content/70">{t('kpi.constructionVsOperation')}</p>
           <p className="text-2xl font-semibold">{constructionShare.toFixed(1)}% / {exploitationShare.toFixed(1)}%</p>
         </div>
       </div>

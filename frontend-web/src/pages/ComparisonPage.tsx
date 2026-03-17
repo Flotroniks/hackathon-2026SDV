@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { compareSites } from '../api/comparisonApi';
 import { fetchSites } from '../api/siteApi';
 import { ComparisonBarChart } from '../components/charts/ComparisonBarChart';
@@ -8,6 +9,7 @@ import type { ComparisonResponse } from '../types/calculation';
 import type { SiteListItemResponse } from '../types/site';
 
 export function ComparisonPage() {
+  const { t } = useTranslation();
   const [sites, setSites] = useState<SiteListItemResponse[]>([]);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [result, setResult] = useState<ComparisonResponse | null>(null);
@@ -23,7 +25,7 @@ export function ComparisonPage() {
       const response = await compareSites({ siteIds: selectedIds });
       setResult(response);
     } catch {
-      setError('Comparison failed. Select 2 to 5 sites with existing calculations.');
+      setError(t('comparison.error'));
     }
   }
 
@@ -40,10 +42,10 @@ export function ComparisonPage() {
 
   return (
     <div className="space-y-5">
-      <h1 className="text-2xl font-semibold">Multi-site comparison</h1>
+      <h1 className="text-2xl font-semibold">{t('comparison.title')}</h1>
       <div className="card bg-base-200">
         <div className="card-body">
-          <p className="text-sm text-base-content/70">Choose 2 to 5 sites and compare their latest saved calculations.</p>
+          <p className="text-sm text-base-content/70">{t('comparison.subtitle')}</p>
           <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
             {sites.map((site) => (
               <label key={site.id} className="label cursor-pointer rounded-lg bg-base-100 px-3 py-2">
@@ -63,7 +65,7 @@ export function ComparisonPage() {
               disabled={selectedIds.length < 2}
               onClick={runComparison}
             >
-              Compare
+              {t('comparison.actions.compare')}
             </button>
           </div>
         </div>
@@ -73,19 +75,19 @@ export function ComparisonPage() {
         <>
           <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
             <div className="stat rounded-xl bg-base-200">
-              <div className="stat-title">Average total emissions</div>
+              <div className="stat-title">{t('comparison.stats.avgTotal')}</div>
               <div className="stat-value text-lg">{formatKg(result.averageTotalEmissionsKgCo2e)}</div>
             </div>
             <div className="stat rounded-xl bg-base-200">
-              <div className="stat-title">Lowest emitting site</div>
+              <div className="stat-title">{t('comparison.stats.lowestSite')}</div>
               <div className="stat-value text-lg">
-                {result.items.find((item) => item.siteId === result.lowestEmissionSiteId)?.siteCode ?? 'N/A'}
+                {result.items.find((item) => item.siteId === result.lowestEmissionSiteId)?.siteCode ?? t('common.na')}
               </div>
             </div>
           </div>
           <div className="card bg-base-200">
             <div className="card-body">
-              <h2 className="card-title">Total emissions by site</h2>
+              <h2 className="card-title">{t('comparison.chartTitle')}</h2>
               <ComparisonBarChart items={result.items} />
             </div>
           </div>
@@ -93,12 +95,12 @@ export function ComparisonPage() {
             <table className="table table-zebra">
               <thead>
                 <tr>
-                  <th>Site</th>
-                  <th>Total</th>
-                  <th>Construction</th>
-                  <th>Operation</th>
-                  <th>CO2/m2</th>
-                  <th>CO2/employee</th>
+                  <th>{t('comparison.table.site')}</th>
+                  <th>{t('comparison.table.total')}</th>
+                  <th>{t('comparison.table.construction')}</th>
+                  <th>{t('comparison.table.operation')}</th>
+                  <th>{t('comparison.table.co2m2')}</th>
+                  <th>{t('comparison.table.co2employee')}</th>
                 </tr>
               </thead>
               <tbody>

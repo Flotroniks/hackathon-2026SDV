@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { calculateSite, fetchCalculationHistory, fetchLatestCalculation } from '../api/calculationApi';
 import client from '../api/client';
 import { fetchSite } from '../api/siteApi';
@@ -8,12 +9,34 @@ import type { SiteResponse } from '../types/site';
 import { formatDateTime, formatKg, formatNumber } from '../utils/formatters';
 import { AlertBanner } from '../components/common/AlertBanner';
 import { LoadingSpinner } from '../components/common/LoadingSpinner';
-import {
-  ExploitationForm,
-  type EnergyType,
-  type ExploitationFormValues,
-  type ExploitationPayload,
-} from '../components/forms/ExploitationForm';
+import ExploitationForm from '../components/forms/ExploitationForm';
+
+type EnergyType = 'electricity' | 'gas' | 'mix';
+
+interface ExploitationFormValues {
+  annualEnergyConsumptionKwh: number | '';
+  energyType: EnergyType;
+  employeeCount: number | '';
+  occupancyRate: number | '';
+  parkingSpaces: number | '';
+  commutingDistanceKmPerDayPerEmployee: number | '';
+  itEquipmentCount: number | '';
+  estimatedItConsumptionKwh: number | '';
+  comment: string;
+}
+
+interface ExploitationPayload {
+  siteId: number | string;
+  annualEnergyConsumptionKwh: number;
+  energyType: EnergyType;
+  employeeCount: number;
+  occupancyRate: number;
+  parkingSpaces: number;
+  commutingDistanceKmPerDayPerEmployee: number;
+  itEquipmentCount: number;
+  estimatedItConsumptionKwh: number | null;
+  comment: string;
+}
 
 function toExploitationEnergyType(energySource: SiteResponse['energySource']): EnergyType {
   if (energySource === 'NATURAL_GAS') {
@@ -31,6 +54,7 @@ async function saveSiteExploitationData(payload: ExploitationPayload) {
 }
 
 export function SiteResultPage() {
+  const { t } = useTranslation();
   const { siteId } = useParams<{ siteId: string }>();
   const [site, setSite] = useState<SiteResponse | null>(null);
   const [latest, setLatest] = useState<CalculationResponse | null>(null);
@@ -76,7 +100,7 @@ export function SiteResultPage() {
       await calculateSite(siteId);
       await loadData();
     } catch {
-      setError('Calculation failed');
+      setError(t('siteResult.errors.calculationFailed'));
     }
   }
 
@@ -85,11 +109,9 @@ export function SiteResultPage() {
     setOperationsSuccess('');
     try {
       await saveSiteExploitationData(payload);
-      setOperationsSuccess("Donnees d'exploitation enregistrees.");
+      setOperationsSuccess(t('siteResult.operations.success'));
     } catch {
-      setOperationsError(
-        "Impossible d'enregistrer les donnees d'exploitation. Verifiez le backend.",
-      );
+      setOperationsError(t('siteResult.operations.error'));
       throw new Error('operations_save_failed');
     }
   }
@@ -99,7 +121,7 @@ export function SiteResultPage() {
   }
 
   if (!site) {
-    return <AlertBanner type="error" message="Site not found" />;
+    return <AlertBanner type="error" message={t('siteResult.errors.siteNotFound')} />;
   }
 
   const exploitationInitialValues: Partial<ExploitationFormValues> = {
@@ -118,49 +140,49 @@ export function SiteResultPage() {
         </div>
         <div className="space-x-2">
           <Link className="btn btn-outline" to={`/sites/${site.id}/edit`}>
-            Edit
+            {t('common.actions.edit')}
           </Link>
           <button className="btn btn-primary" onClick={runCalculation}>
-            Run calculation
+            {t('siteResult.actions.runCalculation')}
           </button>
         </div>
       </div>
       {error ? <AlertBanner type="error" message={error} /> : null}
       {latest ? (
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-4">
-          <div className="stat rounded-xl bg-base-200">
-            <div className="stat-title">Total</div>
+            <div className="stat rounded-xl bg-base-200">
+            <div className="stat-title">{t('siteResult.kpi.total')}</div>
             <div className="stat-value text-primary">{formatKg(latest.totalEmissionsKgCo2e)}</div>
           </div>
           <div className="stat rounded-xl bg-base-200">
-            <div className="stat-title">Construction</div>
+            <div className="stat-title">{t('siteResult.kpi.construction')}</div>
             <div className="stat-value text-secondary">{formatKg(latest.constructionEmissionsKgCo2e)}</div>
           </div>
           <div className="stat rounded-xl bg-base-200">
-            <div className="stat-title">Operation</div>
+            <div className="stat-title">{t('siteResult.kpi.operation')}</div>
             <div className="stat-value text-accent">{formatKg(latest.operationEmissionsKgCo2e)}</div>
           </div>
           <div className="stat rounded-xl bg-base-200">
-            <div className="stat-title">CO2 / m2</div>
-            <div className="stat-value text-lg">{formatNumber(latest.co2PerM2Kg)} kg</div>
+            <div className="stat-title">{t('siteResult.kpi.co2m2')}</div>
+            <div className="stat-value text-lg">{formatNumber(latest.co2PerM2Kg)} {t('common.units.kg')}</div>
           </div>
         </div>
       ) : (
-        <AlertBanner type="info" message="No calculation yet. Click Run calculation to generate the first result." />
+        <AlertBanner type="info" message={t('siteResult.noCalculation')} />
       )}
 
       <div className="card bg-base-200">
         <div className="card-body">
-          <h2 className="card-title">Calculation history</h2>
+          <h2 className="card-title">{t('siteResult.history.title')}</h2>
           <div className="overflow-x-auto">
             <table className="table table-zebra">
               <thead>
                 <tr>
-                  <th>Version</th>
-                  <th>Total</th>
-                  <th>Construction</th>
-                  <th>Operation</th>
-                  <th>Date</th>
+                  <th>{t('siteResult.history.version')}</th>
+                  <th>{t('siteResult.history.total')}</th>
+                  <th>{t('siteResult.history.construction')}</th>
+                  <th>{t('siteResult.history.operation')}</th>
+                  <th>{t('siteResult.history.date')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -180,7 +202,7 @@ export function SiteResultPage() {
       </div>
 
       <div className="space-y-3">
-        <h2 className="text-xl font-semibold">Donnees d'exploitation</h2>
+        <h2 className="text-xl font-semibold">{t('siteResult.operations.title')}</h2>
         {operationsSuccess ? <AlertBanner type="success" message={operationsSuccess} /> : null}
         {operationsError ? <AlertBanner type="error" message={operationsError} /> : null}
         <ExploitationForm

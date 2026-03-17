@@ -1,4 +1,6 @@
 import { Pie, PieChart, ResponsiveContainer, Tooltip, Cell, Legend } from 'recharts';
+import { useTranslation } from 'react-i18next';
+import { formatKg } from '../../utils/formatters';
 
 interface EmissionBreakdownChartProps {
   construction: number;
@@ -8,9 +10,10 @@ interface EmissionBreakdownChartProps {
 const COLORS = ['#2f6f59', '#d9a84f'];
 
 export function EmissionBreakdownChart({ construction, operation }: EmissionBreakdownChartProps) {
+  const { t } = useTranslation();
   const data = [
-    { name: 'Construction', value: construction },
-    { name: 'Operation', value: operation },
+    { name: t('charts.construction'), value: construction },
+    { name: t('charts.operation'), value: operation },
   ];
 
   return (
@@ -22,7 +25,7 @@ export function EmissionBreakdownChart({ construction, operation }: EmissionBrea
               <Cell key={entry.name} fill={COLORS[index % COLORS.length]} />
             ))}
           </Pie>
-          <Tooltip />
+          <Tooltip formatter={(value: number) => formatKg(value)} />
           <Legend />
         </PieChart>
       </ResponsiveContainer>

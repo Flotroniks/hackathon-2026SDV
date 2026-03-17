@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { fetchDashboardSummary, fetchTopSites } from '../api/dashboardApi';
 import type { DashboardSummaryResponse, TopSiteResponse } from '../types/dashboard';
 import { KpiCard } from '../components/kpi/KpiCard';
@@ -7,6 +8,7 @@ import { LoadingSpinner } from '../components/common/LoadingSpinner';
 import { formatKg, formatNumber, formatDateTime } from '../utils/formatters';
 
 export function DashboardPage() {
+  const { t } = useTranslation();
   const [summary, setSummary] = useState<DashboardSummaryResponse | null>(null);
   const [topSites, setTopSites] = useState<TopSiteResponse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -27,16 +29,16 @@ export function DashboardPage() {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-4">
-        <KpiCard title="Sites" value={formatNumber(summary.siteCount)} />
-        <KpiCard title="Calculations" value={formatNumber(summary.calculationCount)} />
-        <KpiCard title="Total CO2" value={formatKg(summary.totalEmissionsKgCo2e)} />
-        <KpiCard title="Avg CO2 / m2" value={`${formatNumber(summary.averageCo2PerM2Kg)} kg`} />
+        <KpiCard title={t('dashboardPage.kpi.sites')} value={formatNumber(summary.siteCount)} />
+        <KpiCard title={t('dashboardPage.kpi.calculations')} value={formatNumber(summary.calculationCount)} />
+        <KpiCard title={t('dashboardPage.kpi.totalCo2')} value={formatKg(summary.totalEmissionsKgCo2e)} />
+        <KpiCard title={t('dashboardPage.kpi.avgCo2m2')} value={`${formatNumber(summary.averageCo2PerM2Kg)} ${t('common.units.kg')}`} />
       </div>
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <div className="card bg-base-200">
           <div className="card-body">
-            <h2 className="card-title">Construction vs Operation</h2>
+            <h2 className="card-title">{t('dashboardPage.breakdownTitle')}</h2>
             <EmissionBreakdownChart
               construction={summary.totalConstructionEmissionsKgCo2e}
               operation={summary.totalOperationEmissionsKgCo2e}
@@ -46,15 +48,15 @@ export function DashboardPage() {
 
         <div className="card bg-base-200">
           <div className="card-body">
-            <h2 className="card-title">Top emitting sites</h2>
+            <h2 className="card-title">{t('dashboardPage.topSitesTitle')}</h2>
             <div className="overflow-x-auto">
               <table className="table table-zebra">
                 <thead>
                   <tr>
-                    <th>Site</th>
-                    <th>Total</th>
-                    <th>CO2/m2</th>
-                    <th>Updated</th>
+                    <th>{t('dashboardPage.table.site')}</th>
+                    <th>{t('dashboardPage.table.total')}</th>
+                    <th>{t('dashboardPage.table.co2m2')}</th>
+                    <th>{t('dashboardPage.table.updated')}</th>
                   </tr>
                 </thead>
                 <tbody>

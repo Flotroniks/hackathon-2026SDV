@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import client from '../api/client';
 import {
   ExploitationForm,
@@ -43,6 +44,7 @@ export async function saveSiteExploitationData(payload: ExploitationPayload) {
 }
 
 export function SiteDetail() {
+  const { t } = useTranslation();
   const [site] = useState<SiteDetailModel>(MOCK_SITE);
   const [isEditMode, setIsEditMode] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -76,13 +78,13 @@ export function SiteDetail() {
       };
 
       await saveSiteExploitationData(payloadToSend);
-      setSuccessMessage("Donnees d'exploitation enregistrees avec succes.");
+      setSuccessMessage(t('exploitationForm.messages.saveSuccess'));
 
       if (!isEditMode) {
         setIsEditMode(true);
       }
     } catch {
-      setErrorMessage("Echec de l'enregistrement. Verifiez la connectivite backend.");
+      setErrorMessage(t('exploitationForm.messages.saveError'));
       throw new Error('save_failed');
     } finally {
       setIsSaving(false);
@@ -97,15 +99,15 @@ export function SiteDetail() {
             <div>
               <h1 className="text-2xl font-semibold">{site.name}</h1>
               <p className="text-sm text-base-content/70">
-                Code: {site.code} | {site.city}, {site.country}
+                {t('siteDetailExample.meta.code')}: {site.code} | {site.city}, {site.country}
               </p>
-              <p className="text-sm text-base-content/70">Surface: {site.totalAreaM2} m2</p>
+              <p className="text-sm text-base-content/70">{t('siteDetailExample.meta.area')}: {site.totalAreaM2} {t('common.units.m2')}</p>
             </div>
             <button
               className="btn btn-outline btn-sm"
               onClick={() => setIsEditMode((prev) => !prev)}
             >
-              {isEditMode ? 'Passer en mode creation' : 'Passer en mode edition'}
+              {isEditMode ? t('common.creation') : t('common.edition')}
             </button>
           </div>
         </div>
@@ -125,7 +127,7 @@ export function SiteDetail() {
 
       {isSaving ? (
         <div className="alert">
-          <span>Enregistrement en cours...</span>
+          <span>{t('common.saving')}</span>
         </div>
       ) : null}
 
